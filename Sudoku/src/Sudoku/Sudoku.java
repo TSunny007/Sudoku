@@ -179,28 +179,39 @@ public class Sudoku {
 	public boolean solve_sudoku(int position) {
 		int valueAtIndex = puzzle[position];
 
-		// Iterate through the possible solutions for this position.
-		for (int possibleSolution = 1; possibleSolution <= 9; possibleSolution++) {
-			// Check if it is a valid solution.
-			if (is_valid(position, possibleSolution)) {
-				// If valid and last value in array, return true (puzzle solved!)
-				//This is our BASE CASE:
-				if(position == 80) {
-					return true;
-				}
-				
-				// If true tell the next position to solve.
-				if (solve_sudoku(position + 1)) {
-					// If it returns true, return true to signal that the
-					// current value set works.
-					return true;
+		//If not value present, then attempt to solve that position.
+		if (valueAtIndex == 0) {
+			// Iterate through the possible solutions for this position.
+			for (int possibleSolution = 1; possibleSolution <= 9; possibleSolution++) {
+				// Check if it is a valid solution.
+				if (is_valid(position, possibleSolution)) {
+					// If valid and last value in array, return true (puzzle
+					// solved!)
+					// This is our BASE CASE:
+					if (position == 80) {
+						return true;
+					}
+
+					// If true tell the next position to solve.
+					if (solve_sudoku(position + 1)) {
+						// If it returns true, return true to signal that the
+						// current value set works.
+						return true;
+					}
 				}
 			}
+			// If we reach here then no values work at that position and we need to
+			// change the previous position's value.
+			return false;
+		}else{
+			//If number is set before, we still need to be able to recurse "through" it.
+			if(solve_sudoku(position+1)){
+				return true;
+			}else{
+				return false;
+			}
 		}
-
-		// If we reach here then no values work at that position and we need to
-		// change the previous position's value.
-		return false;
+		
 	}
 
 	/**
