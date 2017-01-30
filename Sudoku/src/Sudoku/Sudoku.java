@@ -4,6 +4,7 @@
 package Sudoku;
 
 import java.io.BufferedReader;
+import java.io.File;
 import java.util.ArrayList;
 import java.util.HashSet;
 
@@ -21,7 +22,9 @@ public class Sudoku {
 	/**
 	 * Constructor
 	 */
-	public Sudoku() {
+	public Sudoku(String fileName) {
+		File sudokuFile = new File("/animation/" + fileName);
+
 	}
 
 	/**
@@ -87,11 +90,7 @@ public class Sudoku {
 	 *
 	 * The sudoku boxes are:
 	 *
-	 * 0 | 1 | 2 
-	 * ---+---+--- 
-	 * 3 | 4 | 5 
-	 * ---+---+--- 
-	 * 6 | 7 | 8
+	 * 0 | 1 | 2 ---+---+--- 3 | 4 | 5 ---+---+--- 6 | 7 | 8
 	 *
 	 * where each box represents a 3x3 square in the game.
 	 *
