@@ -30,7 +30,7 @@ public class Sudoku {
 		try {
 			Scanner scanner = new Scanner(sudokuFile);
 			int index = 0;
-			while (scanner.hasNext()) {
+			while (scanner.hasNextInt()) {
 				int s = scanner.nextInt();
 				puzzle[index] = s;
 				index++;
