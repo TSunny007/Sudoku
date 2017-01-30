@@ -12,13 +12,9 @@ import java.util.Scanner;
 
 public class Sudoku {
 
-	/**
-	 * Declare fields here as needed.
-	 *
-	 * Remember - the puzzle should (for our purposes) be a one dimensional
-	 * array
-	 */
+	// Integer array representing all the values in our puzzle.
 	private int[] puzzle = new int[81];
+	// Number of guesses for the recursive solver.
 	private int guessCount;
 
 	/**
@@ -29,6 +25,8 @@ public class Sudoku {
 		try {
 			Scanner scanner = new Scanner(sudokuFile);
 			int index = 0;
+			// Parse the puzzle file and place the values inside of our puzzle
+			// array.
 			while (scanner.hasNextInt()) {
 				int s = scanner.nextInt();
 				puzzle[index] = s;
@@ -179,6 +177,29 @@ public class Sudoku {
 	 *
 	 */
 	public boolean solve_sudoku(int position) {
+		int valueAtIndex = puzzle[position];
+
+		// Iterate through the possible solutions for this position.
+		for (int possibleSolution = 1; possibleSolution <= 9; possibleSolution++) {
+			// Check if it is a valid solution.
+			if (is_valid(position, possibleSolution)) {
+				// If valid and last value in array, return true (puzzle solved!)
+				//This is our BASE CASE:
+				if(position == 80) {
+					return true;
+				}
+				
+				// If true tell the next position to solve.
+				if (solve_sudoku(position + 1)) {
+					// If it returns true, return true to signal that the
+					// current value set works.
+					return true;
+				}
+			}
+		}
+
+		// If we reach here then no values work at that position and we need to
+		// change the previous position's value.
 		return false;
 	}
 
@@ -190,7 +211,20 @@ public class Sudoku {
 	 */
 	@Override
 	public String toString() {
-		return get_puzzle().toString();
+		String puzzleString = "";
+		// Get puzzle as matrix.
+		int[][] puzzle = get_puzzle();
+
+		// iterate through the puzzle and paste with space after each number and
+		// new line after each row.
+		for (int row = 0; row < 9; row++) {
+			for (int column = 0; column < 9; column++) {
+				puzzleString += puzzle[row][column] + " ";
+			}
+			puzzleString += "\n";
+		}
+
+		return puzzleString;
 	}
 
 	/**
@@ -214,6 +248,22 @@ public class Sudoku {
 	 * from row, col, box
 	 */
 	public void solve_by_elimination() {
+		// Each HashSet represents all possible values (1-9) for each position
+		// in our puzzle.
+		ArrayList<HashSet> possibilites = new ArrayList<>();
+		for (int index = 0; index < 81; index++) {
+			// For each of the 81 spots in the puzzle, create a hashset of
+			// possible values 1-9
+			HashSet<Integer> possibleSet = new HashSet<>();
+			for (int possibility = 1; possibility <= 9; possibility++) {
+				possibleSet.add(possibility);
+			}
+			possibilites.add(index, possibleSet);
+		}
+
+		do {
+			// Write solving code here.
+		} while (!verify());
 	}
 
 	/**

@@ -14,7 +14,7 @@ public class Main {
 	public static void main(String[] args) {
 		// Create a new puzzle.
 		Sudoku puzzle = new Sudoku("Sudoku1.txt");
-		System.out.println(puzzle);
+		System.out.println(puzzle.toString());
 	}
 
 }
