@@ -12,8 +12,9 @@ public class Main {
 	 * @param args
 	 */
 	public static void main(String[] args) {
-		// TODO Auto-generated method stub
+		//Create a new puzzle.
 		Sudoku puzzle = new Sudoku("Sudoku1");
+		System.out.println(puzzle);
 	}
 
 }

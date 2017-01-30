@@ -5,8 +5,10 @@ package Sudoku;
 
 import java.io.BufferedReader;
 import java.io.File;
+import java.io.FileNotFoundException;
 import java.util.ArrayList;
 import java.util.HashSet;
+import java.util.Scanner;
 
 public class Sudoku {
 
@@ -16,15 +18,27 @@ public class Sudoku {
 	 * Remember - the puzzle should (for our purposes) be a one dimensional
 	 * array
 	 */
-	private int[] puzzle;
+	private int[] puzzle = new int[81];
 	private int guessCount;
 
 	/**
 	 * Constructor
 	 */
 	public Sudoku(String fileName) {
-		File sudokuFile = new File("/animation/" + fileName);
+		File sudokuFile = new File("/puzzles/" + fileName);
 
+		try {
+			Scanner scanner = new Scanner(sudokuFile);
+			int index = 0;
+			while (scanner.hasNext()) {
+				int s = scanner.nextInt();
+				puzzle[index] = s;
+				index++;
+			}
+		} catch (FileNotFoundException e) {
+			System.out.println("File " + fileName + " not found!");
+			e.printStackTrace();
+		}
 	}
 
 	/**
@@ -40,7 +54,16 @@ public class Sudoku {
 	 * @return a copy of the puzzle as a 2D matrix
 	 */
 	public int[][] get_puzzle() {
-		return null;
+		int[][] puzzleMatrix = new int[9][9];
+		// Cycle through the rows and columns of the 2D puzzle matrix.
+		for (int row = 0; row < 9; row++) {
+			for (int column = 0; column < 9; column++) {
+				// To get value, must add which column we're in to nine times
+				// the row so that it lines up correctly.
+				puzzleMatrix[row][column] = puzzle[(row * 9) + column];
+			}
+		}
+		return puzzleMatrix;
 	}
 
 	/**
@@ -151,7 +174,7 @@ public class Sudoku {
 	 */
 	@Override
 	public String toString() {
-		return null;
+		return get_puzzle().toString();
 	}
 
 	/**
