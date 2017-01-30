@@ -113,7 +113,15 @@ public class Sudoku {
 	 * Function: valid_for_col (see above)
 	 */
 	private boolean valid_for_column(int col, int number) {
-		return false;
+		if (col > 8 || col < 0 || number < 1 || number > 9) {
+			throw new IndexOutOfBoundsException();
+		}
+		for (int currentRow = 0; currentRow < 9; currentRow += 9) {
+			if (puzzle[col + currentRow] == number) {
+				return false;
+			}
+		}
+		return true;
 	}
 
 	/**
