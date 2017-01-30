@@ -25,8 +25,7 @@ public class Sudoku {
 	 * Constructor
 	 */
 	public Sudoku(String fileName) {
-		File sudokuFile = new File("/puzzles/" + fileName);
-
+		File sudokuFile = new File("src/puzzles/" + fileName);
 		try {
 			Scanner scanner = new Scanner(sudokuFile);
 			int index = 0;
@@ -98,7 +97,16 @@ public class Sudoku {
 	 *
 	 */
 	private boolean valid_for_row(int row, int number) {
-		return false;
+		if (row > 8 || row < 0 || number < 1 || number > 9) {
+			throw new IndexOutOfBoundsException();
+		}
+		int currentRow = 9 * row;
+		for (int currentColumn = 0; currentColumn < 9; currentColumn++) {
+			if (puzzle[currentRow + currentColumn] == number) {
+				return false;
+			}
+		}
+		return true;
 	}
 
 	/**
