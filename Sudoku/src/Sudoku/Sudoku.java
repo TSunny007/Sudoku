@@ -116,8 +116,8 @@ public class Sudoku {
 		if (col > 8 || col < 0 || number < 1 || number > 9) {
 			throw new IndexOutOfBoundsException();
 		}
-		for (int currentRow = 0; currentRow < 9; currentRow += 9) {
-			if (puzzle[col + currentRow] == number) {
+		for (int currentRow = 0; currentRow < 9; currentRow++) {
+			if (puzzle[col + (9 * currentRow)] == number) {
 				return false;
 			}
 		}
@@ -136,13 +136,13 @@ public class Sudoku {
 	 */
 	private boolean valid_for_box(int box, int number) {
 		// Determine which row/col to start in based on box.
-		int rowStart = box;
+		int rowStart = 3 * (box / 3);
 		int colStart = 3 * (box % 3);
 
 		for (int row = rowStart; row < rowStart + 3; row++) {
 			for (int col = colStart; col < colStart + 3; col++) {
 				// For each value in box, test if it is the given number.
-				if (this.puzzle[9 * row + col] == number) {
+				if (this.puzzle[(9 * row) + col] == number) {
 					return false;
 				}
 			}
@@ -169,6 +169,15 @@ public class Sudoku {
 	 * @return true if valid
 	 */
 	private boolean is_valid(int position, int possible_value) {
+		int row = position / 9;
+		int column = position % 9;
+		int box = (row / 3) + (row % 3);
+
+		
+
+		if(this.valid_for_row(row, possible_value) && this.valid_for_column(column, possible_value) && this.valid_for_box(box, possible_value)){
+			return true;
+		}
 		return false;
 	}
 
@@ -201,6 +210,8 @@ public class Sudoku {
 			for (int possibleSolution = 1; possibleSolution <= 9; possibleSolution++) {
 				// Check if it is a valid solution.
 				if (is_valid(position, possibleSolution)) {
+					puzzle[position] = possibleSolution;
+					
 					// If valid and last value in array, return true (puzzle
 					// solved!)
 					// This is our BASE CASE:
