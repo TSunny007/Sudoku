@@ -171,11 +171,10 @@ public class Sudoku {
 	private boolean is_valid(int position, int possible_value) {
 		int row = position / 9;
 		int column = position % 9;
-		int box = (row / 3) + (row % 3);
+		int box = (row / 3) + (column % 3);
 
-		
-
-		if(this.valid_for_row(row, possible_value) && this.valid_for_column(column, possible_value) && this.valid_for_box(box, possible_value)){
+		if (this.valid_for_row(row, possible_value) && this.valid_for_column(column, possible_value)
+				&& this.valid_for_box(box, possible_value)) {
 			return true;
 		}
 		return false;
@@ -211,7 +210,7 @@ public class Sudoku {
 				// Check if it is a valid solution.
 				if (is_valid(position, possibleSolution)) {
 					puzzle[position] = possibleSolution;
-					
+
 					// If valid and last value in array, return true (puzzle
 					// solved!)
 					// This is our BASE CASE:
