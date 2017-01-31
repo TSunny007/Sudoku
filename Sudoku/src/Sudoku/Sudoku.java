@@ -36,6 +36,8 @@ public class Sudoku {
 			System.out.println("File " + fileName + " not found!");
 			e.printStackTrace();
 		}
+
+		this.valid_for_box(2, 1);
 	}
 
 	/**
@@ -133,7 +135,21 @@ public class Sudoku {
 	 *
 	 */
 	private boolean valid_for_box(int box, int number) {
-		return false;
+		// Determine which row/col to start in based on box.
+		int rowStart = box;
+		int colStart = 3 * (box % 3);
+
+		for (int row = rowStart; row < rowStart + 3; row++) {
+			for (int col = colStart; col < colStart + 3; col++) {
+				// For each value in box, test if it is the given number.
+				if (this.puzzle[9 * row + col] == number) {
+					return false;
+				}
+			}
+		}
+		// If we reach here, the value is valid because it's not present in the
+		// box.
+		return true;
 	}
 
 	/**
@@ -179,7 +195,7 @@ public class Sudoku {
 	public boolean solve_sudoku(int position) {
 		int valueAtIndex = puzzle[position];
 
-		//If not value present, then attempt to solve that position.
+		// If not value present, then attempt to solve that position.
 		if (valueAtIndex == 0) {
 			// Iterate through the possible solutions for this position.
 			for (int possibleSolution = 1; possibleSolution <= 9; possibleSolution++) {
@@ -200,18 +216,20 @@ public class Sudoku {
 					}
 				}
 			}
-			// If we reach here then no values work at that position and we need to
+			// If we reach here then no values work at that position and we need
+			// to
 			// change the previous position's value.
 			return false;
-		}else{
-			//If number is set before, we still need to be able to recurse "through" it.
-			if(solve_sudoku(position+1)){
+		} else {
+			// If number is set before, we still need to be able to recurse
+			// "through" it.
+			if (solve_sudoku(position + 1)) {
 				return true;
-			}else{
+			} else {
 				return false;
 			}
 		}
-		
+
 	}
 
 	/**
