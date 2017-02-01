@@ -101,6 +101,7 @@ public class Sudoku {
 		int currentRow = 9 * row;
 		for (int currentColumn = 0; currentColumn < 9; currentColumn++) {
 			if (puzzle[currentRow + currentColumn] == number) {
+				// System.out.println("false");
 				return false;
 			}
 		}
@@ -116,6 +117,7 @@ public class Sudoku {
 		}
 		for (int currentRow = 0; currentRow < 9; currentRow++) {
 			if (puzzle[col + (9 * currentRow)] == number) {
+				// System.out.println("false");
 				return false;
 			}
 		}
@@ -203,7 +205,7 @@ public class Sudoku {
 		if (position == 81) {
 			return true;
 		}
-		
+
 		int valueAtIndex = puzzle[position];
 
 		// If not value present, then attempt to solve that position.
@@ -225,11 +227,12 @@ public class Sudoku {
 			// If we reach here then no values work at that position and we need
 			// to
 			// change the previous position's value.
+			puzzle[position] = 0;
 			return false;
 		} else {
 			// If number is set before, we still need to be able to recurse
 			// "through" it.
-			return solve_sudoku(position+1);
+			return solve_sudoku(position + 1);
 		}
 
 	}
@@ -281,7 +284,7 @@ public class Sudoku {
 	public void solve_by_elimination() {
 		// Each HashSet represents all possible values (1-9) for each position
 		// in our puzzle.
-		ArrayList<HashSet> possibilites = new ArrayList<>();
+		ArrayList<HashSet<Integer>> possibilites = new ArrayList<>();
 		for (int index = 0; index < 81; index++) {
 			// For each of the 81 spots in the puzzle, create a hashset of
 			// possible values 1-9
@@ -291,7 +294,7 @@ public class Sudoku {
 			}
 			possibilites.add(index, possibleSet);
 		}
-
+		print_possibilities(possibilites);
 		do {
 			// Write solving code here.
 		} while (!verify());
@@ -307,6 +310,11 @@ public class Sudoku {
 	 *            - array list of all the sets of 1-9s
 	 */
 	private static void print_possibilities(ArrayList<HashSet<Integer>> possibilities) {
+
+		for (int x = 0; x < possibilities.size(); x++) {
+			System.out.println(possibilities.get(x).toString());
+		}
+
 	}
 
 	/**
