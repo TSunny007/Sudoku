@@ -329,12 +329,21 @@ public class Sudoku {
 	 *            - the value to prune
 	 */
 	private static void prune_box(ArrayList<HashSet<Integer>> possibilities, int position, Integer value) {
+
 	}
 
 	private static void prune_column(ArrayList<HashSet<Integer>> possibilities, int position, Integer value) {
+		int col = position % 9;
+		for (int currentRow = 0; currentRow < 9; currentRow++) {
+			possibilities.get(col + (9 * currentRow)).remove(value);
+		}
 	}
 
 	private static void prune_row(ArrayList<HashSet<Integer>> possibilities, int position, Integer value) {
+		int row = position / 9;
+		for (int currentColumn = 0; currentColumn < 9; currentColumn++) {
+			possibilities.get(position + currentColumn).remove(value);
+		}
 	}
 
 	/**
