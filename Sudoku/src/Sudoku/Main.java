@@ -15,9 +15,7 @@ public class Main {
 		// Create a new puzzle.
 		Sudoku puzzle = new Sudoku("Sudoku1.txt");
 		System.out.println(puzzle.toString());
-		puzzle.solve_sudoku(0);
-		// puzzle.solve_by_elimination();
-		System.out.println(puzzle.toString());
+		puzzle.solve_by_elimination();
 	}
 
 }

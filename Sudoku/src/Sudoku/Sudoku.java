@@ -186,7 +186,13 @@ public class Sudoku {
 	 * @return true if successful
 	 */
 	public boolean solve_sudoku() {
-		return false;
+		solve_sudoku(0);
+
+		if (verify()) {
+			return true;
+		} else {
+			return false;
+		}
 	}
 
 	/**
@@ -294,9 +300,19 @@ public class Sudoku {
 			}
 			possibilites.add(index, possibleSet);
 		}
+		
 		print_possibilities(possibilites);
+		
 		do {
 			// Write solving code here.
+			for(int index = 0; index < 81; index++) {
+				if(puzzle[index] != 0) {
+					this.prune_box(possibilites, index, puzzle[index]);
+					this.prune_column(possibilites, index, puzzle[index]);
+					this.prune_row(possibilites, index, puzzle[index]);
+				}
+				print_possibilities(possibilites);
+			}
 		} while (!verify());
 	}
 
@@ -352,7 +368,7 @@ public class Sudoku {
 	private static void prune_row(ArrayList<HashSet<Integer>> possibilities, int position, Integer value) {
 		int row = position / 9;
 		for (int currentColumn = 0; currentColumn < 9; currentColumn++) {
-			possibilities.get(position + currentColumn).remove(value);
+			possibilities.get((row * 9) + currentColumn).remove(value);
 		}
 	}
 
