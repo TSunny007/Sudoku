@@ -36,8 +36,6 @@ public class Sudoku {
 			System.out.println("File " + fileName + " not found!");
 			e.printStackTrace();
 		}
-
-		this.valid_for_box(2, 1);
 	}
 
 	/**
@@ -96,7 +94,7 @@ public class Sudoku {
 	 *        puzzle...
 	 *
 	 */
-	private boolean valid_for_row(int row, int number) {
+	public boolean valid_for_row(int row, int number) {
 		if (row > 8 || row < 0 || number < 1 || number > 9) {
 			throw new IndexOutOfBoundsException();
 		}
@@ -112,7 +110,7 @@ public class Sudoku {
 	/**
 	 * Function: valid_for_col (see above)
 	 */
-	private boolean valid_for_column(int col, int number) {
+	public boolean valid_for_column(int col, int number) {
 		if (col > 8 || col < 0 || number < 1 || number > 9) {
 			throw new IndexOutOfBoundsException();
 		}
@@ -134,7 +132,7 @@ public class Sudoku {
 	 * where each box represents a 3x3 square in the game.
 	 *
 	 */
-	private boolean valid_for_box(int box, int number) {
+	public boolean valid_for_box(int box, int number) {
 		// Determine which row/col to start in based on box.
 		int rowStart = 3 * (box / 3);
 		int colStart = 3 * (box % 3);
@@ -168,10 +166,10 @@ public class Sudoku {
 	 * 
 	 * @return true if valid
 	 */
-	private boolean is_valid(int position, int possible_value) {
+	public boolean is_valid(int position, int possible_value) {
 		int row = position / 9;
 		int column = position % 9;
-		int box = (row / 3) + (column % 3);
+		int box = (3 * (row / 3)) + (column / 3);
 
 		if (this.valid_for_row(row, possible_value) && this.valid_for_column(column, possible_value)
 				&& this.valid_for_box(box, possible_value)) {
@@ -201,6 +199,11 @@ public class Sudoku {
 	 *
 	 */
 	public boolean solve_sudoku(int position) {
+		// If end of puzzle, return true (puzzle solved).
+		if (position == 81) {
+			return true;
+		}
+		
 		int valueAtIndex = puzzle[position];
 
 		// If not value present, then attempt to solve that position.
@@ -210,13 +213,6 @@ public class Sudoku {
 				// Check if it is a valid solution.
 				if (is_valid(position, possibleSolution)) {
 					puzzle[position] = possibleSolution;
-
-					// If valid and last value in array, return true (puzzle
-					// solved!)
-					// This is our BASE CASE:
-					if (position == 80) {
-						return true;
-					}
 
 					// If true tell the next position to solve.
 					if (solve_sudoku(position + 1)) {
@@ -233,11 +229,7 @@ public class Sudoku {
 		} else {
 			// If number is set before, we still need to be able to recurse
 			// "through" it.
-			if (solve_sudoku(position + 1)) {
-				return true;
-			} else {
-				return false;
-			}
+			return solve_sudoku(position+1);
 		}
 
 	}
