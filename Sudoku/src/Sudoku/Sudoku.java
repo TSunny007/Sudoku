@@ -417,7 +417,7 @@ public class Sudoku {
 	 * @param possibilities
 	 *            - array list of all the sets of 1-9s
 	 */
-	private static void print_possibilities(ArrayList<HashSet<Integer>> possibilities) {
+	protected static void print_possibilities(ArrayList<HashSet<Integer>> possibilities) {
 
 		for (int index = 0; index < possibilities.size(); index++) {
 			System.out.println(possibilities.get(index).toString());
@@ -436,11 +436,10 @@ public class Sudoku {
 	 * @param value
 	 *            - the value to prune
 	 */
-	private static void prune_box(ArrayList<HashSet<Integer>> possibilities, int position, Integer value) {
+	protected static void prune_box(ArrayList<HashSet<Integer>> possibilities, int position, Integer value) {
 		int row = position / 9;
 		int column = position % 9;
 		int box = (3 * (row / 3)) + (column / 3);
-
 		int rowStart = 3 * (box / 3);
 		int colStart = 3 * (box % 3);
 		for (int currentRow = rowStart; currentRow < rowStart + 3; currentRow++) {
@@ -450,14 +449,14 @@ public class Sudoku {
 		}
 	}
 
-	private static void prune_column(ArrayList<HashSet<Integer>> possibilities, int position, Integer value) {
+	protected static void prune_column(ArrayList<HashSet<Integer>> possibilities, int position, Integer value) {
 		int col = position % 9;
 		for (int currentRow = 0; currentRow < 9; currentRow++) {
 			possibilities.get(col + (9 * currentRow)).remove(value);
 		}
 	}
 
-	private static void prune_row(ArrayList<HashSet<Integer>> possibilities, int position, Integer value) {
+	protected static void prune_row(ArrayList<HashSet<Integer>> possibilities, int position, Integer value) {
 		int row = position / 9;
 		for (int currentColumn = 0; currentColumn < 9; currentColumn++) {
 			possibilities.get((row * 9) + currentColumn).remove(value);
