@@ -12,16 +12,23 @@ public class Main {
 	 * @param args
 	 */
 	public static void main(String[] args) {
-		// Create a new puzzle.
-		Sudoku puzzle = null;
+		// Create new puzzles.
+		Sudoku puzzle1 = null;
+		Sudoku puzzle2 = null;
 		try {
-			puzzle = new Sudoku("Sudoku1.txt");
+			puzzle1 = new Sudoku("Sudoku1.txt");
+			puzzle2 = new Sudoku("Sudoku2.txt");
 		} catch (Exception e) {
 			System.out.println("File is bad.");
 		}
-		System.out.println(puzzle.toString());
-		puzzle.solve_sudoku(0);
-		System.out.println(puzzle.toString());
+
+		// Display, then solve puzzle with elimination.
+		System.out.println(puzzle1.toString());
+		puzzle1.solve_by_elimination();
+
+		// Display, then solve puzzle by brute-force recursion.
+		System.out.println(puzzle2.toString());
+		puzzle2.solve_sudoku();
 	}
 
 }

@@ -16,6 +16,8 @@ public class Sudoku {
 	private int[] puzzle = new int[81];
 	// Number of guesses for the recursive solver.
 	private int guessCount;
+	// If verifying puzzle, alter validity tests slightly for reuse.
+	private boolean isChecking;
 
 	/**
 	 * Constructor
@@ -106,14 +108,24 @@ public class Sudoku {
 		if (row > 8 || row < 0 || number < 1 || number > 9) {
 			throw new IndexOutOfBoundsException();
 		}
+
+		int count = 0;
+
 		int currentRow = 9 * row;
 		for (int currentColumn = 1; currentColumn < 9; currentColumn++) {
 			if (puzzle[currentRow + currentColumn] == number) {
 				// System.out.println("false");
-				return false;
+				count++;
 			}
 		}
-		return true;
+
+		if (count == 1 && !isChecking) {
+			return false;
+		} else if (count == 1 && isChecking) {
+			return true;
+		} else {
+			return true;
+		}
 	}
 
 	/**
@@ -123,13 +135,23 @@ public class Sudoku {
 		if (col > 8 || col < 0 || number < 1 || number > 9) {
 			throw new IndexOutOfBoundsException();
 		}
+
+		int count = 0;
+
 		for (int currentRow = 0; currentRow < 9; currentRow++) {
 			if (puzzle[col + (9 * currentRow)] == number) {
 				// System.out.println("false");
-				return false;
+				count++;
 			}
 		}
-		return true;
+
+		if (count == 1 && !isChecking) {
+			return false;
+		} else if (count == 1 && isChecking) {
+			return true;
+		} else {
+			return true;
+		}
 	}
 
 	/**
@@ -147,17 +169,25 @@ public class Sudoku {
 		int rowStart = 3 * (box / 3);
 		int colStart = 3 * (box % 3);
 
+		int count = 0;
+
 		for (int row = rowStart; row < rowStart + 3; row++) {
 			for (int col = colStart; col < colStart + 3; col++) {
 				// For each value in box, test if it is the given number.
 				if (this.puzzle[(9 * row) + col] == number) {
-					return false;
+					// System.out.println("false");
+					count++;
 				}
 			}
 		}
-		// If we reach here, the value is valid because it's not present in the
-		// box.
-		return true;
+
+		if (count == 1 && !isChecking) {
+			return false;
+		} else if (count == 1 && isChecking) {
+			return true;
+		} else {
+			return true;
+		}
 	}
 
 	/**
@@ -181,6 +211,7 @@ public class Sudoku {
 			return false;
 		}
 
+		// Convert position to row, col, box for use in validation.
 		int row = position / 9;
 		int column = position % 9;
 		int box = (3 * (row / 3)) + (column / 3);
@@ -199,11 +230,7 @@ public class Sudoku {
 	 */
 	public boolean solve_sudoku() {
 		solve_sudoku(0);
-		if (verify()) {
-			return true;
-		} else {
-			return false;
-		}
+		return verify();
 	}
 
 	/**
@@ -295,12 +322,20 @@ public class Sudoku {
 	 * @return true if a validly solved puzzle
 	 */
 	public boolean verify() {
+		// isChecking tells validation to act slightly differently.
+		this.isChecking = true;
 		// Go through whole puzzle and verify each value.
 		for (int index = 0; index < 81; index++) {
 			if (puzzle[index] == 0) {
+				this.isChecking = false;
 				return false;
 			}
+
+			// Check value at position.
+			this.is_valid(index, puzzle[index]);
+
 		}
+		this.isChecking = false;
 		return true;
 	}
 
@@ -328,8 +363,6 @@ public class Sudoku {
 			possibilities.add(index, possibleSet);
 		}
 
-		// print_possibilities(possibilites);
-
 		do {
 			// Write solving code here.
 			for (int index = 0; index < 81; index++) {
@@ -343,11 +376,36 @@ public class Sudoku {
 					}
 				}
 			}
-			System.out.println(this.toString());
-		} while (!verify());
+			// Decides whether to continue based on vals in possibilities.
+		} while (continueSolve(possibilities));
 
-		print_possibilities(possibilities);
-		System.out.println(this.toString());
+		if (verify()) {
+			System.out.println("Puzzle solved.");
+			System.out.println(puzzle.toString());
+		} else {
+			System.out.println("Puzzle not solved by elimination.");
+		}
+	}
+
+	/**
+	 * Helper method that decides if we try to solve another round with
+	 * elimination. We decide by seeing if any of the HashSets are size one
+	 * which implies a new location has been set.
+	 * 
+	 * Note: Because each box is also pruned of its last value, we don't have to
+	 * worry about an infinite loop.
+	 * 
+	 * @param possibilities
+	 *            - our list of HashSet possibilities
+	 * @return - whether or not to solve another time w/ elimination
+	 */
+	private boolean continueSolve(ArrayList<HashSet<Integer>> possibilities) {
+		for (int index = 0; index < possibilities.size(); index++) {
+			if (possibilities.get(index).size() == 1) {
+				return true;
+			}
+		}
+		return false;
 	}
 
 	/**
