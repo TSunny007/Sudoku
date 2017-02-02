@@ -99,7 +99,7 @@ public class Sudoku {
 			throw new IndexOutOfBoundsException();
 		}
 		int currentRow = 9 * row;
-		for (int currentColumn = 0; currentColumn < 9; currentColumn++) {
+		for (int currentColumn = 1; currentColumn < 9; currentColumn++) {
 			if (puzzle[currentRow + currentColumn] == number) {
 				// System.out.println("false");
 				return false;
@@ -261,13 +261,23 @@ public class Sudoku {
 		// iterate through the puzzle and paste with space after each number and
 		// new line after each row.
 		for (int row = 0; row < 9; row++) {
+			if (row % 3 == 0) {
+				puzzleString += "---------------------\n";
+			}
 			for (int column = 0; column < 9; column++) {
+				if (column % 3 == 0) {
+					puzzleString += "|";
+				}
 				puzzleString += puzzle[row][column] + " ";
+				if (column == 8) {
+					puzzleString += "|";
+				}
 			}
 			puzzleString += "\n";
 		}
 
 		return puzzleString;
+
 	}
 
 	/**
