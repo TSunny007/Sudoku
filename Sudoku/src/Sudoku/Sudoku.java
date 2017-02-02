@@ -169,6 +169,10 @@ public class Sudoku {
 	 * @return true if valid
 	 */
 	public boolean is_valid(int position, int possible_value) {
+		if(possible_value == 0){
+			return false;
+		}
+		
 		int row = position / 9;
 		int column = position % 9;
 		int box = (3 * (row / 3)) + (column / 3);
@@ -274,7 +278,13 @@ public class Sudoku {
 	 * @return true if a validly solved puzzle
 	 */
 	public boolean verify() {
-		return false;
+		// Go through whole puzzle and verify each value.
+		for(int index = 0; index < 81; index++) {
+			if(!is_valid(index, puzzle[index])){
+				return false;
+			}
+		}
+		return true;
 	}
 
 	/**
@@ -290,7 +300,7 @@ public class Sudoku {
 	public void solve_by_elimination() {
 		// Each HashSet represents all possible values (1-9) for each position
 		// in our puzzle.
-		ArrayList<HashSet<Integer>> possibilites = new ArrayList<>();
+		ArrayList<HashSet<Integer>> possibilities = new ArrayList<>();
 		for (int index = 0; index < 81; index++) {
 			// For each of the 81 spots in the puzzle, create a hashset of
 			// possible values 1-9
@@ -298,22 +308,29 @@ public class Sudoku {
 			for (int possibility = 1; possibility <= 9; possibility++) {
 				possibleSet.add(possibility);
 			}
-			possibilites.add(index, possibleSet);
+			possibilities.add(index, possibleSet);
 		}
-		
-		print_possibilities(possibilites);
-		
-		do {
+
+		//print_possibilities(possibilites);
+
+		do{
 			// Write solving code here.
-			for(int index = 0; index < 81; index++) {
-				if(puzzle[index] != 0) {
-					this.prune_box(possibilites, index, puzzle[index]);
-					this.prune_column(possibilites, index, puzzle[index]);
-					this.prune_row(possibilites, index, puzzle[index]);
+			for (int index = 0; index < 81; index++) {
+				if (puzzle[index] != 0) {
+					prune_box(possibilities, index, puzzle[index]);
+					prune_column(possibilities, index, puzzle[index]);
+					prune_row(possibilities, index, puzzle[index]);	
+				}else{
+					if(possibilities.get(index).size()==1){
+						puzzle[index] = (int) possibilities.get(index).toArray()[0];
+					}
 				}
-				print_possibilities(possibilites);
 			}
-		} while (!verify());
+			System.out.println(this.toString());
+		}while(!verify());
+		
+		print_possibilities(possibilities);
+		System.out.println(this.toString());
 	}
 
 	/**
@@ -327,8 +344,8 @@ public class Sudoku {
 	 */
 	private static void print_possibilities(ArrayList<HashSet<Integer>> possibilities) {
 
-		for (int x = 0; x < possibilities.size(); x++) {
-			System.out.println(possibilities.get(x).toString());
+		for (int index = 0; index < possibilities.size(); index++) {
+			System.out.println(possibilities.get(index).toString());
 		}
 
 	}
