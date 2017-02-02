@@ -1,12 +1,12 @@
 package Sudoku;
 
-import static org.junit.Assert.*;
+import static org.junit.Assert.assertEquals;
 
 import org.junit.Test;
 
 public class SudokuTest {
 
-	//Two sudoku puzzles to test with.
+	// Two sudoku puzzles to test with.
 	private Sudoku puzzle1;
 	private Sudoku puzzle2;
 
@@ -15,8 +15,13 @@ public class SudokuTest {
 	 */
 	@org.junit.Before
 	public void Before() {
-		puzzle1 = new Sudoku("Sudoku1.txt");
-		puzzle2 = new Sudoku("Sudoku2.txt");
+		try {
+			puzzle1 = new Sudoku("Sudoku1.txt");
+			puzzle2 = new Sudoku("Sudoku2.txt");
+		} catch (Exception e) {
+			System.out.println("File(s) bad.");
+		}
+
 	}
 
 	/**

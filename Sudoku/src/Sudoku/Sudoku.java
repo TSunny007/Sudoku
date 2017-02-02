@@ -19,8 +19,10 @@ public class Sudoku {
 
 	/**
 	 * Constructor
+	 * 
+	 * @throws Exception
 	 */
-	public Sudoku(String fileName) {
+	public Sudoku(String fileName) throws Exception {
 		File sudokuFile = new File("src/puzzles/" + fileName);
 		try {
 			Scanner scanner = new Scanner(sudokuFile);
@@ -31,6 +33,12 @@ public class Sudoku {
 				int s = scanner.nextInt();
 				puzzle[index] = s;
 				index++;
+			}
+
+			if (index > 81) {// because index increments one value after there's
+								// 80 indices, so we have to make the inequality
+								// less than 81
+				throw new Exception();
 			}
 		} catch (FileNotFoundException e) {
 			System.out.println("File " + fileName + " not found!");
@@ -289,7 +297,7 @@ public class Sudoku {
 	public boolean verify() {
 		// Go through whole puzzle and verify each value.
 		for (int index = 0; index < 81; index++) {
-			if (!is_valid(index, puzzle[index])) {
+			if (puzzle[index] == 0) {
 				return false;
 			}
 		}

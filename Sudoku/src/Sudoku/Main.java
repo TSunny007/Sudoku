@@ -13,9 +13,15 @@ public class Main {
 	 */
 	public static void main(String[] args) {
 		// Create a new puzzle.
-		Sudoku puzzle = new Sudoku("Sudoku1.txt");
+		Sudoku puzzle = null;
+		try {
+			puzzle = new Sudoku("Sudoku1.txt");
+		} catch (Exception e) {
+			System.out.println("File is bad.");
+		}
 		System.out.println(puzzle.toString());
-		puzzle.solve_by_elimination();
+		puzzle.solve_sudoku(0);
+		System.out.println(puzzle.toString());
 	}
 
 }
