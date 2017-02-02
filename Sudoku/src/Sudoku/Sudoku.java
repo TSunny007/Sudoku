@@ -169,10 +169,10 @@ public class Sudoku {
 	 * @return true if valid
 	 */
 	public boolean is_valid(int position, int possible_value) {
-		if(possible_value == 0){
+		if (possible_value == 0) {
 			return false;
 		}
-		
+
 		int row = position / 9;
 		int column = position % 9;
 		int box = (3 * (row / 3)) + (column / 3);
@@ -191,7 +191,6 @@ public class Sudoku {
 	 */
 	public boolean solve_sudoku() {
 		solve_sudoku(0);
-
 		if (verify()) {
 			return true;
 		} else {
@@ -279,8 +278,8 @@ public class Sudoku {
 	 */
 	public boolean verify() {
 		// Go through whole puzzle and verify each value.
-		for(int index = 0; index < 81; index++) {
-			if(!is_valid(index, puzzle[index])){
+		for (int index = 0; index < 81; index++) {
+			if (!is_valid(index, puzzle[index])) {
 				return false;
 			}
 		}
@@ -311,24 +310,24 @@ public class Sudoku {
 			possibilities.add(index, possibleSet);
 		}
 
-		//print_possibilities(possibilites);
+		// print_possibilities(possibilites);
 
-		do{
+		do {
 			// Write solving code here.
 			for (int index = 0; index < 81; index++) {
 				if (puzzle[index] != 0) {
 					prune_box(possibilities, index, puzzle[index]);
 					prune_column(possibilities, index, puzzle[index]);
-					prune_row(possibilities, index, puzzle[index]);	
-				}else{
-					if(possibilities.get(index).size()==1){
+					prune_row(possibilities, index, puzzle[index]);
+				} else {
+					if (possibilities.get(index).size() == 1) {
 						puzzle[index] = (int) possibilities.get(index).toArray()[0];
 					}
 				}
 			}
 			System.out.println(this.toString());
-		}while(!verify());
-		
+		} while (!verify());
+
 		print_possibilities(possibilities);
 		System.out.println(this.toString());
 	}
