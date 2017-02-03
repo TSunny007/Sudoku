@@ -11,6 +11,13 @@ import java.util.ArrayList;
 import java.util.HashSet;
 import java.util.Scanner;
 
+/**
+ * Sudoku class, that stores a sudoku puzzle as a 1D array and solves the puzzle
+ * using both a recursive and constraint solver.
+ * 
+ * @author markvandermerwe and tarunsunkaraneni
+ *
+ */
 public class Sudoku {
 
 	// Integer array representing all the values in our puzzle.
@@ -243,9 +250,10 @@ public class Sudoku {
 	public boolean solve_sudoku() {
 		solve_sudoku(0);
 		if (verify()) {
-			//System.out.println("Puzzle solved.");
-			//System.out.println(this.toString());
-			//System.out.println("Puzzle solved in " + this.guessCount + " guesses.");
+			// System.out.println("Puzzle solved.");
+			// System.out.println(this.toString());
+			// System.out.println("Puzzle solved in " + this.guessCount + "
+			// guesses.");
 			return true;
 		} else {
 			return false;
