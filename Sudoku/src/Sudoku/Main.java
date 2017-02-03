@@ -28,10 +28,12 @@ public class Main {
 
 		// Display, then solve puzzle with elimination.
 		System.out.println(puzzle1.toString());
+		System.out.println("Percent complete already: " + puzzle1.percentComplete());
 		puzzle1.solve_by_elimination();
 
 		// Display, then solve puzzle by brute-force recursion.
 		System.out.println(puzzle2.toString());
+		System.out.println("Percent complete already: " + puzzle2.percentComplete());
 		puzzle2.solve_sudoku();
 	}
 

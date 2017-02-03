@@ -16,7 +16,7 @@ public class Sudoku {
 	// Integer array representing all the values in our puzzle.
 	private int[] puzzle = new int[81];
 	// Number of guesses for the recursive solver.
-	private int guessCount;
+	private int guessCount = 0;
 	// If verifying puzzle, alter validity tests slightly for reuse.
 	private boolean isChecking;
 
@@ -242,11 +242,12 @@ public class Sudoku {
 	 */
 	public boolean solve_sudoku() {
 		solve_sudoku(0);
-		if(verify()){
+		if (verify()) {
 			System.out.println("Puzzle solved.");
 			System.out.println(this.toString());
+			System.out.println("Puzzle solved in " + this.guessCount + " guesses.");
 			return true;
-		}else{
+		} else {
 			return false;
 		}
 	}
@@ -274,6 +275,8 @@ public class Sudoku {
 		if (valueAtIndex == 0) {
 			// Iterate through the possible solutions for this position.
 			for (int possibleSolution = 1; possibleSolution <= 9; possibleSolution++) {
+				// Increment for guess.
+				this.guessCount++;
 				// Check if it is a valid solution.
 				if (is_valid(position, possibleSolution)) {
 					puzzle[position] = possibleSolution;
@@ -403,6 +406,7 @@ public class Sudoku {
 		} else {
 			System.out.println("Puzzle not solved by elimination.");
 		}
+		System.out.println("Percent complete: " + percentComplete());
 	}
 
 	/**
@@ -501,6 +505,22 @@ public class Sudoku {
 		for (int currentColumn = 0; currentColumn < 9; currentColumn++) {
 			possibilities.get((row * 9) + currentColumn).remove(value);
 		}
+	}
+
+	/**
+	 * Determines what percent of the current puzzle object is complete.
+	 * 
+	 * @return percent complete of current puzzle.
+	 */
+	public double percentComplete() {
+		int complete = 0;
+		for (int index = 0; index < puzzle.length; index++) {
+			if (puzzle[index] != 0) {
+				complete++;
+			}
+		}
+		// Divide the numbers in puzzle by total size for percentage.
+		return (double) complete / 81;
 	}
 
 }
