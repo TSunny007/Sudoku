@@ -271,23 +271,18 @@ public class SudokuTest {
 		}
 		// Make sure if no new solutions, kill elimination method - otherwise
 		// infinite loop.
-		assertFalse(Sudoku.continueSolve(possibilities));
+		assertFalse(puzzle1.continueSolve(possibilities));
 
 		possibilities = new ArrayList<>();
 		for (int index = 0; index < 81; index++) {
 			// For each of the 81 spots in the puzzle, create a hashset of
 			// possible values 1-2
 			HashSet<Integer> possibleSet = new HashSet<>();
-			for (int possibility = 1; possibility <= 3; possibility++) {
-				possibleSet.add(possibility);
-			}
+			possibleSet.add(1);
 			possibilities.add(index, possibleSet);
 		}
-		HashSet<Integer> additionalSet = new HashSet<>();
-		additionalSet.add(4);
-		possibilities.add(additionalSet);
 		// Make sure if new solutions, keep solving.
-		assertTrue(Sudoku.continueSolve(possibilities));
+		assertTrue(puzzle1.continueSolve(possibilities));
 	}
 
 	/**

@@ -243,9 +243,9 @@ public class Sudoku {
 	public boolean solve_sudoku() {
 		solve_sudoku(0);
 		if (verify()) {
-			System.out.println("Puzzle solved.");
-			System.out.println(this.toString());
-			System.out.println("Puzzle solved in " + this.guessCount + " guesses.");
+			//System.out.println("Puzzle solved.");
+			//System.out.println(this.toString());
+			//System.out.println("Puzzle solved in " + this.guessCount + " guesses.");
 			return true;
 		} else {
 			return false;
@@ -331,7 +331,7 @@ public class Sudoku {
 			}
 			puzzleString += "\n";
 		}
-
+		puzzleString += "---------------------\n";
 		return puzzleString;
 
 	}
@@ -388,6 +388,7 @@ public class Sudoku {
 			// Write solving code here.
 			for (int index = 0; index < 81; index++) {
 				if (puzzle[index] != 0) {
+					possibilities.get(index).clear();
 					prune_box(possibilities, index, puzzle[index]);
 					prune_column(possibilities, index, puzzle[index]);
 					prune_row(possibilities, index, puzzle[index]);
@@ -399,14 +400,6 @@ public class Sudoku {
 			}
 			// Decides whether to continue based on vals in possibilities.
 		} while (continueSolve(possibilities));
-
-		if (verify()) {
-			System.out.println("Puzzle solved.");
-			System.out.println(this.toString());
-		} else {
-			System.out.println("Puzzle not solved by elimination.");
-		}
-		System.out.println("Percent complete: " + percentComplete());
 	}
 
 	/**
@@ -421,7 +414,7 @@ public class Sudoku {
 	 *            - our list of HashSet possibilities
 	 * @return - whether or not to solve another time w/ elimination
 	 */
-	protected static boolean continueSolve(ArrayList<HashSet<Integer>> possibilities) {
+	protected boolean continueSolve(ArrayList<HashSet<Integer>> possibilities) {
 		for (int index = 0; index < possibilities.size(); index++) {
 			if (possibilities.get(index).size() == 1) {
 				return true;
