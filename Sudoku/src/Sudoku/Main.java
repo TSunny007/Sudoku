@@ -3,6 +3,9 @@
  */
 package Sudoku;
 
+import java.io.BufferedReader;
+import java.io.FileReader;
+
 /**
  * @author markvandermerwe and tarunsunkaraneni
  *
@@ -16,7 +19,8 @@ public class Main {
 		Sudoku puzzle1 = null;
 		Sudoku puzzle2 = null;
 		try {
-			puzzle1 = new Sudoku("Sudoku1.txt");
+			BufferedReader file1 = new BufferedReader(new FileReader("src/puzzles/Sudoku1.txt"));
+			puzzle1 = new Sudoku(file1);
 			puzzle2 = new Sudoku("Sudoku2.txt");
 		} catch (Exception e) {
 			System.out.println("File is bad.");

@@ -242,7 +242,13 @@ public class Sudoku {
 	 */
 	public boolean solve_sudoku() {
 		solve_sudoku(0);
-		return verify();
+		if(verify()){
+			System.out.println("Puzzle solved.");
+			System.out.println(this.toString());
+			return true;
+		}else{
+			return false;
+		}
 	}
 
 	/**
@@ -393,7 +399,7 @@ public class Sudoku {
 
 		if (verify()) {
 			System.out.println("Puzzle solved.");
-			System.out.println(puzzle.toString());
+			System.out.println(this.toString());
 		} else {
 			System.out.println("Puzzle not solved by elimination.");
 		}
@@ -411,7 +417,7 @@ public class Sudoku {
 	 *            - our list of HashSet possibilities
 	 * @return - whether or not to solve another time w/ elimination
 	 */
-	private boolean continueSolve(ArrayList<HashSet<Integer>> possibilities) {
+	protected static boolean continueSolve(ArrayList<HashSet<Integer>> possibilities) {
 		for (int index = 0; index < possibilities.size(); index++) {
 			if (possibilities.get(index).size() == 1) {
 				return true;
@@ -461,6 +467,17 @@ public class Sudoku {
 		}
 	}
 
+	/**
+	 * Given a possibility constraint matrix (81 sets of [1-9]) remove the given
+	 * number from every matrix in the given column
+	 * 
+	 * @param possibilities
+	 *            - 81 sets of [1-9]
+	 * @param position
+	 *            - where the value exists (transform to row,col)
+	 * @param value
+	 *            - the value to prune
+	 */
 	protected static void prune_column(ArrayList<HashSet<Integer>> possibilities, int position, Integer value) {
 		int col = position % 9;
 		for (int currentRow = 0; currentRow < 9; currentRow++) {
@@ -468,15 +485,22 @@ public class Sudoku {
 		}
 	}
 
+	/**
+	 * Given a possibility constraint matrix (81 sets of [1-9]) remove the given
+	 * number from every matrix in the given row
+	 * 
+	 * @param possibilities
+	 *            - 81 sets of [1-9]
+	 * @param position
+	 *            - where the value exists (transform to row,col)
+	 * @param value
+	 *            - the value to prune
+	 */
 	protected static void prune_row(ArrayList<HashSet<Integer>> possibilities, int position, Integer value) {
 		int row = position / 9;
 		for (int currentColumn = 0; currentColumn < 9; currentColumn++) {
 			possibilities.get((row * 9) + currentColumn).remove(value);
 		}
 	}
-
-	/**
-	 * Add any private helper functions you need as appropriate
-	 */
 
 }

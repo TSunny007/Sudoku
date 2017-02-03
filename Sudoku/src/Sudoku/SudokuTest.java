@@ -1,6 +1,6 @@
 package Sudoku;
 
-import static org.junit.Assert.assertEquals;
+import static org.junit.Assert.*;
 
 import java.io.BufferedReader;
 import java.io.File;
@@ -13,9 +13,10 @@ import org.junit.Test;
 
 public class SudokuTest {
 
-	// Two sudoku puzzles to test with.
+	// Several sudoku puzzles to test with.
 	private Sudoku puzzle1;
 	private Sudoku puzzle2;
+	private Sudoku solvedPuzzle;
 
 	/**
 	 * Create a few puzzles to test on.
@@ -25,6 +26,7 @@ public class SudokuTest {
 		try {
 			puzzle1 = new Sudoku("Sudoku1.txt");
 			puzzle2 = new Sudoku("Sudoku2.txt");
+			solvedPuzzle = new Sudoku("Sudoku4.txt");
 		} catch (Exception e) {
 			System.out.println("File(s) bad.");
 		}
@@ -90,6 +92,9 @@ public class SudokuTest {
 		assertEquals(true, puzzle2.is_valid(24, 3));
 	}
 
+	/**
+	 * Make sure we can prune our HashSets of certain numbers.
+	 */
 	@Test
 	public void test_prune_row() {
 		ArrayList<HashSet<Integer>> possibilities = new ArrayList<>();
@@ -133,6 +138,9 @@ public class SudokuTest {
 		}
 	}
 
+	/**
+	 * Make sure we can prune our HashSets of certain numbers.
+	 */
 	@Test
 	public void test_prune_column() {
 		ArrayList<HashSet<Integer>> possibilities = new ArrayList<>();
@@ -178,6 +186,9 @@ public class SudokuTest {
 
 	}
 
+	/**
+	 * Make sure we can prune our HashSets of certain numbers.
+	 */
 	@Test
 	public void test_prune_box() {
 		ArrayList<HashSet<Integer>> possibilities = new ArrayList<>();
@@ -230,10 +241,94 @@ public class SudokuTest {
 
 	}
 
+	/**
+	 * Make sure the function to verify our puzzles as complete or not works as
+	 * expected.
+	 */
 	@Test
-	public void test_buffered_array() throws IOException {
-		BufferedReader reader = new BufferedReader(new FileReader(new File("src/puzzles/Sudoku1.txt")));
-		Sudoku bufferedPuzzle = new Sudoku(reader);
-		System.out.println(bufferedPuzzle.toString());
+	public void test_verify() {
+		// Make sure solved puzzle comes back as solved.
+		assertTrue(solvedPuzzle.verify());
+		// And the inverse.
+		assertFalse(puzzle1.verify());
+	}
+
+	/**
+	 * Make sure continue solve tells the system to continue solving if there is
+	 * a HashSet of size one.
+	 */
+	@Test
+	public void test_continue_solve() {
+		ArrayList<HashSet<Integer>> possibilities = new ArrayList<>();
+		for (int index = 0; index < 81; index++) {
+			// For each of the 81 spots in the puzzle, create a hashset of
+			// possible values 1-2
+			HashSet<Integer> possibleSet = new HashSet<>();
+			for (int possibility = 1; possibility <= 3; possibility++) {
+				possibleSet.add(possibility);
+			}
+			possibilities.add(index, possibleSet);
+		}
+		// Make sure if no new solutions, kill elimination method - otherwise
+		// infinite loop.
+		assertFalse(Sudoku.continueSolve(possibilities));
+
+		possibilities = new ArrayList<>();
+		for (int index = 0; index < 81; index++) {
+			// For each of the 81 spots in the puzzle, create a hashset of
+			// possible values 1-2
+			HashSet<Integer> possibleSet = new HashSet<>();
+			for (int possibility = 1; possibility <= 3; possibility++) {
+				possibleSet.add(possibility);
+			}
+			possibilities.add(index, possibleSet);
+		}
+		HashSet<Integer> additionalSet = new HashSet<>();
+		additionalSet.add(4);
+		possibilities.add(additionalSet);
+		// Make sure if new solutions, keep solving.
+		assertTrue(Sudoku.continueSolve(possibilities));
+	}
+
+	/**
+	 * Make sure our recursive solver solves correctly.
+	 */
+	@Test
+	public void test_solve_recursive() {
+		//Reinitialize just in case.
+		try {
+			puzzle1 = new Sudoku("Sudoku1.txt");
+			puzzle2 = new Sudoku("Sudoku2.txt");
+			solvedPuzzle = new Sudoku("Sudoku4.txt");
+		} catch (Exception e) {
+			System.out.println("File(s) bad.");
+		}
+		
+		puzzle1.solve_sudoku();
+		assertTrue(puzzle1.verify());
+		
+		puzzle2.solve_sudoku();
+		assertTrue(puzzle2.verify());
+	}
+	
+	/**
+	 * Make sure our elimination solver solves correctly.
+	 */
+	@Test
+	public void test_solve_by_elimination() {
+		//Reinitialize just in case.
+		try {
+			puzzle1 = new Sudoku("Sudoku1.txt");
+			puzzle2 = new Sudoku("Sudoku2.txt");
+			solvedPuzzle = new Sudoku("Sudoku4.txt");
+		} catch (Exception e) {
+			System.out.println("File(s) bad.");
+		}
+		
+		puzzle1.solve_by_elimination();
+		assertTrue(puzzle1.verify());
+		
+		puzzle2.solve_by_elimination();
+		assertTrue(puzzle2.verify());
 	}
 }
