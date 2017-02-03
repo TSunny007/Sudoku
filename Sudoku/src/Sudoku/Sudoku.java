@@ -6,6 +6,7 @@ package Sudoku;
 import java.io.BufferedReader;
 import java.io.File;
 import java.io.FileNotFoundException;
+import java.io.IOException;
 import java.util.ArrayList;
 import java.util.HashSet;
 import java.util.Scanner;
@@ -52,9 +53,20 @@ public class Sudoku {
 	 * Create a new puzzle by reading a file
 	 *
 	 * the file should be 9 rows of 9 numbers separated by whitespace
+	 * 
 	 *
 	 */
-	public Sudoku(BufferedReader reader) {
+	public Sudoku(BufferedReader reader) throws IOException {
+		for (int i = 0; i < 9; i++) {
+			int count = 0;
+			while (count < 9) {
+				int currentValue = Character.getNumericValue(reader.read());
+				if (currentValue >= 0) {
+					puzzle[count + i * 9] = currentValue;
+					count++;
+				}
+			}
+		}
 	}
 
 	/**

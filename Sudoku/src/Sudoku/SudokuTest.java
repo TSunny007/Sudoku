@@ -2,6 +2,10 @@ package Sudoku;
 
 import static org.junit.Assert.assertEquals;
 
+import java.io.BufferedReader;
+import java.io.File;
+import java.io.FileReader;
+import java.io.IOException;
 import java.util.ArrayList;
 import java.util.HashSet;
 
@@ -224,5 +228,12 @@ public class SudokuTest {
 			}
 		}
 
+	}
+
+	@Test
+	public void test_buffered_array() throws IOException {
+		BufferedReader reader = new BufferedReader(new FileReader(new File("src/puzzles/Sudoku1.txt")));
+		Sudoku bufferedPuzzle = new Sudoku(reader);
+		System.out.println(bufferedPuzzle.toString());
 	}
 }
